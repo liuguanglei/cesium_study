@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="../Build/Cesium/Cesium.js"></script>
+  <script src="./js/jquery-1.9.1.min.js"></script>
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="infoArea"></div>
+  <script>
+
+    function test_draw_image(){
+      var number=1;
+      
+      var i_min = -180;
+      var j_min = 0;
+      var i_max = 180;
+      var j_max = 0;
+      for (var i=i_min;i<=i_max;i++){
+        
+        for (var j=j_min;j<=j_max;j++)
+        {
+          var image="./images/router_type1.png";
+          var longitude = i; 
+          var latitude = j;
+          
+          number += 1;
+          var entity_id=number.toString();
+          var entity = viewer.entities.getOrCreateEntity(entity_id);
+          entity.position= Cesium.Cartesian3.fromDegrees(longitude,latitude),
+           /* ellipse:{
+              semiMinorAxis : 150000.0,
+              semiMajorAxis : 150000.0,
+              material:"../../img/router_type3_backup.png"
+            }*/
+          entity.billboard =  {
+                image : image,
+                width : 50,
+                height : 50
+            }
+          /* var ip = data.ip;
+          var production = data.model;
+          var location = data.location;
+          entity.location = location;
+          entity.production = production;
+          entity.ip = ip;
+          entity.data_type = type;
+          entity.data_id = data.id; */
+          // console.log(i,j);
+        }
+         
+      }
+    }
+
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+      animation:false, //是否创建动画小器件，左下角仪表
+      baseLayerPicker:false, //是否显示图层选择器
+      fullscreenButton:false, //是否显示全屏按钮
+      geocoder:false, //是否显示geocoder小器件，右上角查询按钮
+      // homeButton:false, //是否显示Home按钮
+      infoBox : false, //是否显示信息框
+      sceneModePicker:true, //是否显示3D/2D选择器
+      selectionIndicator : false , //是否显示选取指示器组件
+      timeline:false, //是否显示时间轴
+      navigationHelpButton:false, //是否显示右上角的帮助按钮
+      scene3DOnly : false, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
+      navigationInstructionsInitiallyVisible:false,
+      showRenderLoopErrors:false,
+      CreditDisplay:false,
+      imageryProvider : Cesium.createTileMapServiceImageryProvider({
+        url : Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII-update')
+      }), 
+      /* imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+         url : 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+      }), */
+	    imageryProvider : Cesium.createOpenStreetMapImageryProvider({
+        url : 'http://192.168.142.130:8888/v2/world_countries/'
+      }),
+      baseLayerPicker : false,
+      // terrainProvider:terrainProvider,
+      geocoder : false
+      
+    });
+    viewer._cesiumWidget._creditContainer.style.display="none";//隐藏版权文本
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+    test_draw_image();
+
+    // 海洋地形
+    var terrainProvider = new Cesium.CesiumTerrainProvider({
+            url : '//assets.agi.com/stk-terrain/world',
+          requestWaterMask: true
+        });
+    viewer.terrainProvider = terrainProvider;
+
+    /*var scene = viewer.scene;
+    var modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(
+        Cesium.Cartesian3.fromDegrees(-75.62898254394531, 40.02804946899414, 0.0));
+    var model = scene.primitives.add(Cesium.Model.fromGltf({
+        url : '../../Apps/SampleData/models/CesiumGround/Cesium_Ground.gltf',
+        modelMatrix : modelMatrix,
+        scale : 200.0
+    }));*/
+
+    var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);  
+    handler.setInputAction(function (movement) {  
+        var pick = viewer.scene.pick(movement.endPosition);  
+        if (pick){     
+          var left = movement.endPosition.x;
+          var top = movement.endPosition.y;
+          var entity_id = pick.id.id;
+          var entity = viewer.entities.getById(entity_id);
+          var input = $("input").filter(function(index){
+                      return $(this).attr('id') === entity_id;
+                  });
+          if (input.length!=0){
+            return ;
+          }
+          $("#details_hover").remove();
+          var ip = "127.0.0.1";
+          var production = "xxx";
+          var location = "xxx";
+          var title = 'detail';
+          var ip = '<span><p><span>'+production+'</span></p><p><span>IP:</span><span>' + ip + '</span></p><p><span>' + location + '</span></p></p></span>'
+          var div = '<div id="details_hover" style="font-size:12px;color: #999;position: absolute;top:'+(top+20)+'px;left:'+ (left + 20) + 'px;background: rgba(51,51,51,0.5);"><p style="background: background: rgba(51,51,51,0.5);;text-align: center">' + title + '</p><div style="padding: 0px 5px 5px 5px">' + ip + '</div><input type="hidden" id="'+entity_id+'"></div>'
+          $('#infoArea').append(div);
+        }
+        else{
+          $("#details_hover").remove();
+        }
+    }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+    var click_handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+    click_handler.setInputAction(function (movement) {
+        
+        var pick = viewer.scene.pick(movement.position);
+        if (pick){
+          var entity_id = pick.id.id;
+          var entity = viewer.entities.getById(entity_id);
+          alert(entity.id);
+        }
+    }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  </script>
+</body>
+</html>

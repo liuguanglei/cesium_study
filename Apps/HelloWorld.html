@@ -86,9 +86,9 @@
       /* imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
          url : 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
       }), */
-	    imageryProvider : Cesium.createOpenStreetMapImageryProvider({
+	    /*imageryProvider : Cesium.createOpenStreetMapImageryProvider({
         url : 'http://192.168.142.130:8888/v2/world_countries/'
-      }),
+      }),*/
       baseLayerPicker : false,
       // terrainProvider:terrainProvider,
       geocoder : false
@@ -96,7 +96,7 @@
     });
     viewer._cesiumWidget._creditContainer.style.display="none";//隐藏版权文本
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-    test_draw_image();
+    // test_draw_image();
 
     // 海洋地形
     var terrainProvider = new Cesium.CesiumTerrainProvider({
@@ -152,6 +152,61 @@
           alert(entity.id);
         }
     }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+    function createModel(url, height) {
+        viewer.entities.removeAll();
+
+        var position = Cesium.Cartesian3.fromDegrees(116.0, 39.9, height);
+        var heading = Cesium.Math.toRadians(135);
+        var pitch = 0;
+        var roll = 0;
+        var hpr = new Cesium.HeadingPitchRoll(heading, pitch, roll);
+        var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
+
+        var entity = viewer.entities.add({
+            name : url,
+            position : position,
+            orientation : orientation,
+            model : {
+                uri : url,
+                minimumPixelSize : 128,
+                maximumScale : 20000
+            }
+        });
+        viewer.trackedEntity = entity;
+    }
+
+    createModel('../Apps/SampleData/models/CesiumAir/Cesium_Air.dae', 5000.0);
+    // createModel('../Apps/SampleData/models/CesiumGround/Cesium_Ground.gltf', 1000.0);
+
+    /*var options = [{
+                      text : 'Aircraft',
+                      onselect : function() {
+                          createModel('../../SampleData/models/CesiumAir/Cesium_Air.glb', 5000.0);
+                      }
+                  }, {
+                      text : 'Ground vehicle',
+                      onselect : function() {
+                          createModel('../../SampleData/models/CesiumGround/Cesium_Ground.glb', 0);
+                      }
+                  }, {
+                      text : 'Hot Air Balloon',
+                      onselect : function() {
+                          createModel('../../SampleData/models/CesiumBalloon/CesiumBalloon.glb', 1000.0);
+                      }
+                  }, {
+                      text : 'Milk truck',
+                      onselect : function() {
+                          createModel('../../SampleData/models/CesiumMilkTruck/CesiumMilkTruck-kmc.glb', 0);
+                      }
+                  }, {
+                      text : 'Skinned character',
+                      onselect : function() {
+                          createModel('../../SampleData/models/CesiumMan/Cesium_Man.glb', 0);
+                      }
+                  }];
+
+    Sandcastle.addToolbarMenu(options);*/
   </script>
 </body>
 </html>

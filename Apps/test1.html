@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="../Build/Cesium/Cesium.js"></script>
+  <script src="../../js/jquery-1.9.1.min.js"></script>
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="infoArea"></div>
+  <script>
+
+   
+
+
+/*var czml = [
+  {
+    "id":"document",
+    "name":"simple",
+    "version":"1.0",
+    "clock":{
+      "interval":"2012-03-15T10:00:00Z/2012-03-16T10:00:00Z",
+      "currentTime":"2012-03-15T10:00:00Z",
+      "multiplier":60,
+      "range":"LOOP_STOP",
+      "step":"SYSTEM_CLOCK_MULTIPLIER"
+    }
+  },
+  {
+    "id" : "model",
+    "position" : {
+        "cartographicDegrees" : [-77, 37, 100000]
+    },
+
+    "model": {
+        "gltf" : "SampleData/models/CesiumMan/Cesium_Man.glb",
+         "scale":1000000
+        
+    }
+  }
+];*/
+/*var viewer = new Cesium.Viewer('cesiumContainer');
+var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
+
+promise.then(function(dataSource){
+    viewer.trackedEntity = dataSource.entities.getById('model');
+}).otherwise(function(error){
+    window.alert(error);
+});*/
+var viewer = new Cesium.Viewer('cesiumContainer',{
+      animation:false, //是否创建动画小器件，左下角仪表
+      baseLayerPicker:false, //是否显示图层选择器
+      fullscreenButton:false, //是否显示全屏按钮
+      geocoder:false, //是否显示geocoder小器件，右上角查询按钮
+      homeButton:false, //是否显示Home按钮
+      infoBox : false, //是否显示信息框
+      sceneModePicker:false, //是否显示3D/2D选择器
+      selectionIndicator : false , //是否显示选取指示器组件
+      timeline:false, //是否显示时间轴
+      navigationHelpButton:false, //是否显示右上角的帮助按钮
+      scene3DOnly : true, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
+      navigationInstructionsInitiallyVisible:false,
+      showRenderLoopErrors:false,
+      CreditDisplay:false,
+     /*  imageryProvider : new Cesium.ArcGisMapServerImageryProvider({
+        url : 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer'
+     }),*/
+     
+    /*  imageryProvider : Cesium.createOpenStreetMapImageryProvider({
+        url : 'http://192.168.142.130:8888/v2/world_countries/'
+      }),*/
+      baseLayerPicker : false,
+      //terrainProvider:terrainProvider,
+      geocoder : false
+    });
+  viewer._cesiumWidget._creditContainer.style.display="none";//隐藏版权文本
+  viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+var czml = [
+  {
+    "id" : "document",
+    "name" : "CZML Model",
+    "version" : "1.0",
+    "clock": {
+        "interval": "2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+        "currentTime": "2015-01-01T00:00:00Z",
+        "multiplier": 20
+    }
+  }, 
+  {
+    "id" : "satelite",
+    "position" : {
+        "cartographicDegrees" : [125.9389490000,21.8974520000, 1000000]
+    },
+    "model": {
+        "gltf" : "SampleData/models/weixing-Mars Global Surveyor(color).gltf",
+         "scale":50000
+    }
+  },
+  { 
+    "id" : "junjian5",
+    "model": {
+        "gltf" : "SampleData/models/junjian5.gltf",
+         "scale":1
+    },
+    /*"positon":{
+      "interpolationAlgorithm":"LAGRANGE",
+      "interpolationDegree":5,
+      "referenceFrame":"INERTIAL",
+      "epoch":"2015-01-01T00:00:00Z",
+      "cartographicDegrees":[0.0, 125.9389490000,21.8974520000, 0,  //从起点开始，第0秒时坐标为(1,2,3)
+            60.0, 126.9389490000,21.8974520000, 0, //从起点开始，第60秒时坐标为(4,5,6) 
+            120.0, 127.9389490000,21.8974520000, 0] //从起点开始，第120秒时坐标为(7,8,9) ],
+    }*/
+    "position" : {
+        "interpolationAlgorithm":"LAGRANGE",
+          "interpolationDegree":1,
+          "epoch":"2015-01-01T00:00:00Z",
+        "cartographicDegrees" : [0.0,125.9389490000,21.8974520000, 0,
+        60.0, 130.9389490000,21.8974520000, 0,
+        120.0, 135.9389490000,21.8974520000, 0,
+        180.0, 130.9389490000,21.8974520000, 0,
+        240.0, 125.9389490000,21.8974520000, 0,
+        ]
+    }
+  },
+
+   {
+    "id" : "polyline",
+    /*"positon":{
+      "interpolationAlgorithm":"LAGRANGE",
+      "interpolationDegree":5,
+      "referenceFrame":"INERTIAL",
+      "epoch":"2015-01-01T00:00:00Z",
+      "cartographicDegrees":[0.0, 125.9389490000,21.8974520000, 0,  //从起点开始，第0秒时坐标为(1,2,3)
+            60.0, 126.9389490000,21.8974520000, 0, //从起点开始，第60秒时坐标为(4,5,6) 
+            120.0, 127.9389490000,21.8974520000, 0] //从起点开始，第120秒时坐标为(7,8,9) ],
+    }*/
+    "polyline":{
+        "show":[
+        {
+          "interval":"2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+          "boolean":true
+        }],
+        "width":1,
+        "material":{
+            "solidColor":{
+              "color":{
+                "rgba":[
+                  0,255,255,255
+                ]
+              }
+            }
+        },
+        "followSurface":false,
+        "positions":{
+            "references":[
+              "satelite#position","junjian5#position"
+            ]
+          }
+      }
+  }
+];
+
+// var czml = "./SampleData/simple.czml";
+var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
+
+
+promise.then(function(dataSource){
+    viewer.zoomTo (dataSource.entities.getById('junjian5'));
+}).otherwise(function(error){
+    window.alert(error);
+});
+  </script>
+</body>
+</html>

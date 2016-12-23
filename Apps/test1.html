@@ -22,44 +22,42 @@
   <div id="infoArea"></div>
   <script>
 
-   
-
-
-/*var czml = [
-  {
-    "id":"document",
-    "name":"simple",
-    "version":"1.0",
-    "clock":{
-      "interval":"2012-03-15T10:00:00Z/2012-03-16T10:00:00Z",
-      "currentTime":"2012-03-15T10:00:00Z",
-      "multiplier":60,
-      "range":"LOOP_STOP",
-      "step":"SYSTEM_CLOCK_MULTIPLIER"
-    }
-  },
-  {
-    "id" : "model",
-    "position" : {
-        "cartographicDegrees" : [-77, 37, 100000]
-    },
-
-    "model": {
-        "gltf" : "SampleData/models/CesiumMan/Cesium_Man.glb",
-         "scale":1000000
-        
-    }
-  }
-];*/
-/*var viewer = new Cesium.Viewer('cesiumContainer');
-var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
-
-promise.then(function(dataSource){
-    viewer.trackedEntity = dataSource.entities.getById('model');
-}).otherwise(function(error){
-    window.alert(error);
-});*/
-var viewer = new Cesium.Viewer('cesiumContainer',{
+	/*var czml = [
+	  {
+	    "id":"document",
+	    "name":"simple",
+	    "version":"1.0",
+	    "clock":{
+	      "interval":"2012-03-15T10:00:00Z/2012-03-16T10:00:00Z",
+	      "currentTime":"2012-03-15T10:00:00Z",
+	      "multiplier":60,
+	      "range":"LOOP_STOP",
+	      "step":"SYSTEM_CLOCK_MULTIPLIER"
+	    }
+	  },
+	  {
+	    "id" : "model",
+	    "position" : {
+	        "cartographicDegrees" : [-77, 37, 100000]
+	    },
+	
+	    "model": {
+	        "gltf" : "SampleData/models/CesiumMan/Cesium_Man.glb",
+	         "scale":1000000
+	        
+	    }
+	  }
+	];*/
+	/*var viewer = new Cesium.Viewer('cesiumContainer');
+	var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
+	
+	promise.then(function(dataSource){
+	    viewer.trackedEntity = dataSource.entities.getById('model');
+	}).otherwise(function(error){
+	    window.alert(error);
+	});*/
+	
+	var viewer = new Cesium.Viewer('cesiumContainer',{
       animation:false, //是否创建动画小器件，左下角仪表
       baseLayerPicker:false, //是否显示图层选择器
       fullscreenButton:false, //是否显示全屏按钮
@@ -85,103 +83,370 @@ var viewer = new Cesium.Viewer('cesiumContainer',{
       //terrainProvider:terrainProvider,
       geocoder : false
     });
-  viewer._cesiumWidget._creditContainer.style.display="none";//隐藏版权文本
-  viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
-var czml = [
-  {
-    "id" : "document",
-    "name" : "CZML Model",
-    "version" : "1.0",
-    "clock": {
-        "interval": "2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
-        "currentTime": "2015-01-01T00:00:00Z",
-        "multiplier": 20
-    }
-  }, 
-  {
-    "id" : "satelite",
-    "position" : {
-        "cartographicDegrees" : [125.9389490000,21.8974520000, 1000000]
-    },
-    "model": {
-        "gltf" : "SampleData/models/weixing-Mars Global Surveyor(color).gltf",
-         "scale":50000
-    }
-  },
-  { 
-    "id" : "junjian5",
-    "model": {
-        "gltf" : "SampleData/models/junjian5.gltf",
-         "scale":1
-    },
-    /*"positon":{
-      "interpolationAlgorithm":"LAGRANGE",
-      "interpolationDegree":5,
-      "referenceFrame":"INERTIAL",
-      "epoch":"2015-01-01T00:00:00Z",
-      "cartographicDegrees":[0.0, 125.9389490000,21.8974520000, 0,  //从起点开始，第0秒时坐标为(1,2,3)
-            60.0, 126.9389490000,21.8974520000, 0, //从起点开始，第60秒时坐标为(4,5,6) 
-            120.0, 127.9389490000,21.8974520000, 0] //从起点开始，第120秒时坐标为(7,8,9) ],
-    }*/
-    "position" : {
-        "interpolationAlgorithm":"LAGRANGE",
-          "interpolationDegree":1,
-          "epoch":"2015-01-01T00:00:00Z",
-        "cartographicDegrees" : [0.0,125.9389490000,21.8974520000, 0,
-        60.0, 130.9389490000,21.8974520000, 0,
-        120.0, 135.9389490000,21.8974520000, 0,
-        180.0, 130.9389490000,21.8974520000, 0,
-        240.0, 125.9389490000,21.8974520000, 0,
-        ]
-    }
-  },
-
-   {
-    "id" : "polyline",
-    /*"positon":{
-      "interpolationAlgorithm":"LAGRANGE",
-      "interpolationDegree":5,
-      "referenceFrame":"INERTIAL",
-      "epoch":"2015-01-01T00:00:00Z",
-      "cartographicDegrees":[0.0, 125.9389490000,21.8974520000, 0,  //从起点开始，第0秒时坐标为(1,2,3)
-            60.0, 126.9389490000,21.8974520000, 0, //从起点开始，第60秒时坐标为(4,5,6) 
-            120.0, 127.9389490000,21.8974520000, 0] //从起点开始，第120秒时坐标为(7,8,9) ],
-    }*/
-    "polyline":{
-        "show":[
-        {
-          "interval":"2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
-          "boolean":true
-        }],
-        "width":1,
-        "material":{
-            "solidColor":{
-              "color":{
-                "rgba":[
-                  0,255,255,255
-                ]
-              }
-            }
+  	viewer._cesiumWidget._creditContainer.style.display="none";//隐藏版权文本
+  	viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+	
+  	var czml = [
+	  {
+	    "id" : "document",
+	    "name" : "CZML Model",
+	    "version" : "1.0",
+	    "clock": {
+	        "interval": "2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+	        "currentTime": "2015-01-01T00:00:00Z",
+	        "multiplier": 20
+	    }
+	  }, 
+	  {
+	    "id" : "satelite",
+	    "position" : {
+	        "cartographicDegrees" : [-80.9389490000,-8.8974520000, 500000]
+	    },
+        "orientation": {
+            "unitQuaternion": [ 95.0, -90.0, 90.0, 45.0 ]
         },
-        "followSurface":false,
-        "positions":{
-            "references":[
-              "satelite#position","junjian5#position"
-            ]
-          }
+	    "model": {
+	        "gltf" : "SampleData/models/sat.gltf",
+	         "scale":50000
+	    }
+	  },
+	  { 
+	    "id" : "junjian5",
+	    "model": {
+	        "gltf" : "SampleData/models/junjian5.gltf",
+	         "scale":0.3
+	    },
+	    /*"positon":{
+	      "interpolationAlgorithm":"LAGRANGE",
+	      "interpolationDegree":5,
+	      "referenceFrame":"INERTIAL",
+	      "epoch":"2015-01-01T00:00:00Z",
+	      "cartographicDegrees":[0.0, 125.9389490000,21.8974520000, 0,  //从起点开始，第0秒时坐标为(1,2,3)
+	            60.0, 126.9389490000,21.8974520000, 0, //从起点开始，第60秒时坐标为(4,5,6) 
+	            120.0, 127.9389490000,21.8974520000, 0] //从起点开始，第120秒时坐标为(7,8,9) ],
+	    }*/
+	    "position" : {
+	        "interpolationAlgorithm":"LAGRANGE",
+          	"interpolationDegree":1,
+          	"epoch":"2015-01-01T00:00:00Z",
+	        "cartographicDegrees" : [
+				0.0,-80.9389490000,-8.8974520000, 0,
+		        60.0, -78.9389490000,-10.8974520000, 0,
+		        120.0, -76.9389490000,-13.8974520000, 0,
+		        180.0, -74.9389490000,-15.8974520000, 0,
+		        240.0, -72.9389490000,-18.8974520000, 0,
+	        ]
+	    },
+	    "orientation": {
+            "unitQuaternion": [ 135.0, -90.0, 90.0, 45.0 ]
+        }
+	  },
+	  {
+        "id" : "Cesium_Air",
+        "position" : {
+            "cartographicDegrees" : [-87.9389490000,-8.4974520000, 300000]
+        },
+        "model": {
+            "gltf" : "SampleData/models/CesiumAir/Cesium_Air.gltf",
+             "scale":10000
+        },
+        "position" : {
+	        "interpolationAlgorithm":"LAGRANGE",
+          	"interpolationDegree":1,
+          	"epoch":"2015-01-01T00:00:00Z",
+	        "cartographicDegrees" : [
+				0.0,-97.9389490000,-13.4974520000, 300000,
+		        80.0, -95.9389490000,-14.4974520000, 300000,
+		        80.0, -90.9389490000,-15.4974520000, 300000,
+		        80.0, -85.9389490000,-16.4974520000, 300000,
+		        120.0, -80.9389490000,-17.4974520000, 300000,
+		        180.0, -75.9389490000,-18.4974520000, 300000,
+		        240.0, -60.9389490000,-19.4974520000, 300000
+	        ]
+	    }
+      },
+      {
+  	    "id" : "yellowEllipsoid",
+  	    "name" : "ellipsoid with yellow outline",
+  	    /* "position" : {
+  	        "cartographicDegrees" : [-70.9389490000,-8.4974520000, 300]
+  	    }, */
+  	    "position" : {
+  	        "interpolationAlgorithm":"LAGRANGE",
+           	"interpolationDegree":1,
+           	"epoch":"2015-01-01T00:00:00Z",
+           	"cartographicDegrees" : [
+    				0.0,-97.9389490000,-13.4974520000, 300000,
+    		        80.0, -95.9389490000,-14.4974520000, 300000,
+    		        80.0, -90.9389490000,-15.4974520000, 300000,
+    		        80.0, -85.9389490000,-16.4974520000, 300000,
+    		        120.0, -80.9389490000,-17.4974520000, 300000,
+    		        180.0, -75.9389490000,-18.4974520000, 300000,
+    		        240.0, -60.9389490000,-19.4974520000, 300000
+    	        ]
+  	    },
+  	    "ellipsoid" : {
+  	        "radii" : {
+  	            "cartesian" : [400000.0, 400000.0, 270000.0]
+  	        },
+  	        "fill" : false,
+  	        "outline" : true,
+  	        "outlineColor" : {
+  	            "rgba" : [255, 255, 0, 50]
+  	        },
+  	        "slicePartitions" : 24,
+  	        "stackPartitions" : 36
+  	    }
+  	  },
+	  {
+	    "id" : "polyline",
+	    /*"positon":{
+	      "interpolationAlgorithm":"LAGRANGE",
+	      "interpolationDegree":5,
+	      "referenceFrame":"INERTIAL",
+	      "epoch":"2015-01-01T00:00:00Z",
+	      "cartographicDegrees":[0.0, 125.9389490000,21.8974520000, 0,  //从起点开始，第0秒时坐标为(1,2,3)
+	            60.0, 126.9389490000,21.8974520000, 0, //从起点开始，第60秒时坐标为(4,5,6) 
+	            120.0, 127.9389490000,21.8974520000, 0] //从起点开始，第120秒时坐标为(7,8,9) ],
+	    }*/
+	    "polyline":{
+	        "show":[
+	        {
+	          "interval":"2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+	          "boolean":true
+	        }],
+	        "width":1,
+	        "material":{
+	            "solidColor":{
+	              "color":{
+	                "rgba":[
+	                  0,255,0,200
+	                ]
+	              }
+	            }
+	        },
+	        "followSurface":true,
+	        "positions":{
+	            "references":[
+	              "satelite#position","junjian5#position"
+	            ]
+	          }
+	      }
+	  },
+	  {
+	    "id" : "polylineAirplane",
+	    "polyline":{
+	        "show":[
+	        {
+	          "interval":"2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+	          "boolean":true
+	        }],
+	        "width":1,
+	        "material":{
+	            "solidColor":{
+	              "color":{
+	                "rgba":[
+	                  14,241,243,120
+	                ]
+	              }
+	            }
+	        },
+	        "followSurface":true,
+	        "positions":{
+	            "references":[
+	              "satelite#position","Cesium_Air#position"
+	            ]
+	          }
+	      }
+	  },
+	  {
+	    "id" : "weixingjieshouguo",
+	    "position" : {
+	        "cartographicDegrees" : [-70.9389490000,-8.4974520000, 300]
+	    },
+	    "model": {
+	        "gltf" : "SampleData/models/weixingjieshouguo.gltf",
+	         "scale":3000
+	    }
+	  },
+	  {
+        "id" : "zhandouji1",
+        "position" : {
+            "cartographicDegrees" : [-87.9389490000,-8.4974520000, 1000]
+        },
+        "orientation": {
+            "unitQuaternion": [ 0.0, -90.0, 90.0, 1.0 ]
+        },
+        "model": {
+            "gltf" : "SampleData/models/zhandouji1.gltf",
+             "scale":0.05
+        }
+      },
+      {
+	    "id" : "path",
+	    "name" : "path with GPS flight data",
+	    "description" : "<p>Hang gliding flight log data from Daniel H. Friedman.<br>Icon created by Larisa Skosyrska from the Noun Project</p>",
+	    "availability" : "2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+	    "path" : {
+	        "material" : {
+	            "polylineOutline" : {
+	                "color" : {
+	                    "rgba" : [255, 0, 0, 255]
+	                },
+	                /* 
+	                "outlineColor" : {
+	                    "rgba" : [0, 255, 255, 255]
+	                }, 
+	                "outlineWidth" : 5
+	                */
+	            }
+	        },
+	        "width" : 3,
+	        "leadTime" : 10,
+	        "trailTime" : 1000,
+	        "resolution" : 5
+	    },/* 
+	    "billboard" : {
+	        "image" : "data:image/png;base64,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",
+	        "scale" : 1.5,
+	        "eyeOffset": {
+	            "cartesian": [ 0.0, 0.0, -10.0 ]
+	        }
+	    }, */
+	    "position" : {
+	        "epoch" : "2015-01-01T00:00:00Z",
+	        "cartographicDegrees" : [
+	            0,-87.9389490000,-8.4974520000, 1000,
+	            20,-86.9389490000,-8.4974520000, 300,
+	            40,-85.9389490000,-8.4974520000, 1000,
+	            80,-83.9389490000,-8.4974520000, 50000,
+	            120,-80.9389490000,-8.4974520000, 100000,
+	            180,-75.9389490000,-8.4974520000, 50000,
+	            200,-72.9389490000,-8.4974520000, 1000,
+	            240,-70.9389490000,-8.4974520000, 300]
+	    }
       }
-  }
-];
+	];
 
-// var czml = "./SampleData/simple.czml";
-var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
+	// var czml = "./SampleData/simple.czml";
+	var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
+	
+	promise.then(function(dataSource){
+	    // viewer.zoomTo (dataSource.entities.getById('junjian5'));
+	}).otherwise(function(error){
+	    window.alert(error);
+	});
 
+	/** 
+     * 根据偏移量计算目标点经纬度 
+     * @param {} start  起始点经纬度数组，单位度 
+     * @param {} offset 东北方向的偏移量，单位米 
+     * @param {} 目标点经纬度数组，单位度 
+     */  
+    function offsetToLongLat( start, offset )  
+    {  
+        var er = 6378137;  
+        var lat = parseFloat( start[1] );  
+        var lon = parseFloat( start[0] );  
+        var dn = parseFloat( offset[1] );  
+        var de = parseFloat( offset[0] );  
+       
+        dLat = dn / er;  
+        var pi = Math.PI;  
+        var dLon = de / ( er * Math.cos( pi * lat / 180 ) )  
+        return [  
+            lon + dLon * 180 / pi, lat + dLat * 180 / pi  
+        ];  
+    }
+     
+	/** 
+     * 通过绘制三角形模拟卫星光束效果 
+     * @param {} entities 实体集 
+     * @param {} stltPos 卫星三维坐标数组 
+     * @param {} points 地面点 
+     * @param {} color CSS颜色代码，例如#FF0000 
+     */  
+    function lightShinePolygon( entities, stltPos, points, color )  
+    {  
+        for ( var i = 0; i < points.length; i += 2 )  
+        {  
+            var array = [  
+                stltPos[0], stltPos[1], stltPos[2], points[i], points[i + 1], 0  
+            ];  
+            if ( i + 2 == points.length )  
+            {  
+                array.push( points[0] );  
+                array.push( points[1] );  
+            }  
+            else  
+            {  
+                array.push( points[i + 2] );  
+                array.push( points[i + 3] );  
+            }  
+            array.push( 0 );  
+            entities.add( {
+                polygon : {  
+                    hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights( array ),  
+                    perPositionHeight : true,  
+                    outline : false,  
+                    material : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .1 )  
+                }  
+            } );  
+        }  
+    }    
 
-promise.then(function(dataSource){
-    viewer.zoomTo (dataSource.entities.getById('junjian5'));
-}).otherwise(function(error){
-    window.alert(error);
-});
+    //一个圆形覆盖范围
+    function addCoverCircle()  
+    {  
+        var r = 6000000;//半径  
+        var color = '#00FF00';
+        //圆心  
+        var ecLong = 110.0;  
+        var ecLat = 30.0;  
+        var ec = Cesium.Cartesian3.fromDegrees( ecLong, ecLat, 0 );  
+        //模拟光照效果的若干多边形  
+        var points = [];  
+        for ( var i = 0; i < 360; i += 10 )  
+        {  
+            var coord = offsetToLongLat( [  
+                ecLong, ecLat  
+            ], [  
+                Math.cos( Math.PI * i / 180 ) * r, Math.sin( Math.PI * i / 180 ) * r  
+            ] );  
+            points.push( coord[0] );  
+            points.push( coord[1] );  
+        }  
+        lightShinePolygon( entities, stltPos, points, color );  
+        //圆  
+        position : ec,  
+        viewer.entities.add( { 
+            ellipse : {  
+                semiMinorAxis : r,  
+                semiMajorAxis : r,  
+                height : 0.0,  
+                outline : true,  
+                outlineColor : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .4 ),  
+                material : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .3 )  
+            }  
+        } );  
+    }
+    var entities = viewer.entities;
+    var stltPos = [-87.9389490000,-8.4974520000, 1000]; 
+    addCoverCircle();
+    
+	// 初始化视角
+	function flyTo(lon,lat,height=100000.0){
+        viewer.camera.flyTo({  
+            destination : Cesium.Cartesian3.fromDegrees(lon, lat, height),
+            orientation : {
+                heading : Cesium.Math.toRadians( 0),  
+                pitch : Cesium.Math.toRadians( -50 ),  
+                roll : Cesium.Math.toRadians( 0 )
+            }, 
+        });
+    }
+	
+    flyTo(-85.0,-35.0,2200000.0);
   </script>
 </body>
 </html>

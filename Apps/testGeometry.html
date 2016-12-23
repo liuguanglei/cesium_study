@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>Hello World!</title>
   <script src="../Build/Cesium/Cesium.js"></script>
-  <script src="../../js/jquery-1.9.1.min.js"></script>
+  <script src="../Apps/js/jquery-1.9.1.min.js"></script>
   <style>
       @import url(../Build/Cesium/Widgets/widgets.css);
       html, body, #cesiumContainer {
@@ -43,24 +43,310 @@
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
 
     var scene = viewer.scene;
-    scene.primitives.add(new Cesium.Primitive({
-    geometryInstances : new Cesium.GeometryInstance({
-        geometry : Cesium.BoxGeometry.fromDimensions({
-            vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
-            dimensions : new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
-        }),
-        modelMatrix : Cesium.Matrix4.multiplyByTranslation(
-            Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(-105.0, 45.0)),
-            new Cesium.Cartesian3(0.0, 0.0, 250000), new Cesium.Matrix4()),
-        attributes : {
-            color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
-        }
-    }),
-    appearance : new Cesium.PerInstanceColorAppearance({
-        closed: true
-    })
-}));
 
+    // A solid white line segment
+    var primitive = new Cesium.Primitive({
+      geometryInstances : new Cesium.GeometryInstance({
+        geometry : new Cesium.SimplePolylineGeometry({
+          positions : Cesium.Cartesian3.fromDegreesArray([
+            0.0, 0.0,
+            5.0, 0.0
+          ])
+        }),
+        attributes : {
+          color : Cesium.ColorGeometryInstanceAttribute.fromColor(new Cesium.Color(1.0, 1.0, 1.0, 1.0))
+        }
+      }),
+      appearance : new Cesium.PerInstanceColorAppearance({
+        flat : true,
+        translucent : false
+      })
+    });
+
+    // Two rectangles in a primitive, each with a different color
+    var instance = new Cesium.GeometryInstance({
+      geometry : new Cesium.RectangleGeometry({
+        rectangle : Cesium.Rectangle.fromDegrees(0.0, 20.0, 10.0, 30.0)
+      }),
+      attributes : {
+        color : new Cesium.Color(1.0, 0.0, 0.0, 0.5)
+      }
+    });
+
+    var anotherInstance = new Cesium.GeometryInstance({
+      geometry : new Cesium.RectangleGeometry({
+        rectangle : Cesium.Rectangle.fromDegrees(0.0, 40.0, 10.0, 50.0)
+      }),
+      attributes : {
+        color : new Cesium.Color(0.0, 0.0, 1.0, 0.5)
+      }
+    });
+
+    scene.primitives.add(new Cesium.Primitive({
+        geometryInstances : new Cesium.GeometryInstance({
+            geometry : Cesium.BoxGeometry.fromDimensions({
+                vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+                dimensions : new Cesium.Cartesian3(400000.0, 300000.0, 500000.0)
+            }),
+            modelMatrix : Cesium.Matrix4.multiplyByTranslation(
+                Cesium.Transforms.eastNorthUpToFixedFrame(Cesium.Cartesian3.fromDegrees(-105.0, 45.0)),
+                new Cesium.Cartesian3(0.0, 0.0, 250000), new Cesium.Matrix4()),
+            attributes : {
+                color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.RED.withAlpha(0.5))
+            }
+        }),
+        // geometryInstances : [instance, anotherInstance],
+        appearance : new Cesium.PerInstanceColorAppearance({
+            closed: true
+        })
+    }));
+
+    var wyoming = viewer.entities.add({  //添加一个实体，仅需要传递一个简单JSON对象，返回值是一个Entity对象  
+      name : 'Wyoming',  
+      polygon : {  
+        hierarchy : Cesium.Cartesian3.fromDegreesArray([//一组地理坐标  
+                                  -109.080842,45.002073,  
+                                  -105.91517,45.002073,  
+                                  -104.058488,44.996596,  
+                                  -104.053011,43.002989,  
+                                  -104.053011,41.003906,  
+                                  -105.728954,40.998429,  
+                                  -107.919731,41.003906,  
+                                  -109.04798,40.998429,  
+                                  -111.047063,40.998429,  
+                                  -111.047063,42.000709,  
+                                  -111.047063,44.476286,  
+                                  -111.05254,45.002073]),  
+        material : Cesium.Color.RED.withAlpha(0.5), //材质  
+        outline : true, //是否显示轮廓  
+        outlineColor : Cesium.Color.BLACK //轮廓的颜色  
+      }  
+    });  
+    viewer.zoomTo(wyoming);//缩放、平移视图使实体可见
+
+    var blueCorridor = viewer.entities.add({  
+        name : 'Blue extruded corridor with beveled corners and outline',  
+        corridor : {  
+            positions : Cesium.Cartesian3.fromDegreesArray(  
+            [    80.0, 40.0,  
+                 -85.0, 40.0,  
+                 -85.0, 35.0  
+            ]),  
+            height : 200000.0,  
+            extrudedHeight : 100000.0,  
+            width : 200000.0,  
+            cornerType: Cesium.CornerType.BEVELED,  
+            material : Cesium.Color.BLUE.withAlpha(0.5),  
+            outline : true,  
+            outlineColor : Cesium.Color.BLUE  
+        }  
+    }); 
+    var yellowLine = viewer.entities.add({  
+        name : '不贴着地表的线',  
+        polyline : {  
+            positions : Cesium.Cartesian3.fromDegreesArrayHeights(  
+                [-75, 43, 500000,-125, 43, 500000]  
+            ),  
+            width : 3,  
+            followSurface : false,  //是否贴着地表  
+            material : Cesium.Color.PURPLE  
+        }  
+    }); 
+    var redLine = viewer.entities.add({  
+        name : '沿着地球表面的红线',  
+        polyline : {  
+            positions : Cesium.Cartesian3.fromDegreesArray(  
+                [-75, 35,  
+                 -125, 35]),  
+            width : 5,  
+            material : Cesium.Color.RED  
+        }  
+    }); 
+    function computeStar(arms, rOuter, rInner) {  
+        var angle = Math.PI / arms;  
+        var length = 2 * arms;  
+        var positions = new Array(length);  
+        for (var i = 0; i < length; i++) {  
+            var r = (i % 2) === 0 ? rOuter : rInner;  
+            positions[i] = new Cesium.Cartesian2(  
+                Math.cos(i * angle) * r, Math.sin(i * angle) * r);  
+        }  
+        return positions;  
+    }  
+    var blueStar = viewer.entities.add({  
+        name : 'Blue star with mitered corners and outline',  
+        polylineVolume : {  
+            positions : Cesium.Cartesian3.fromDegreesArrayHeights(  
+                [-95.0, 32.0, 0.0,  
+                 -95.0, 36.0, 100000.0,  
+                 -99.0, 36.0, 200000.0]),  
+            shape : computeStar(7, 70000, 50000),  
+            cornerType : Cesium.CornerType.MITERED,  
+            material : Cesium.Color.BLUE,  
+            outline : true,  
+            outlineColor : Cesium.Color.BLACK  
+        }  
+    }); 
+    // viewer.zoomTo(viewer.entities.blueStar);  
+    var blueWall = viewer.entities.add({  
+        name : 'Blue wall with sawtooth heights and outline',  
+        wall : {  
+            //坐标点，不指定高度  
+            positions : Cesium.Cartesian3.fromDegreesArray(  
+                [-115.0, 50.0,  
+                 -112.5, 50.0,  
+                 -110.0, 50.0,  
+                 -107.5, 50.0,  
+                 -105.0, 50.0,  
+                 -102.5, 50.0,  
+                 -100.0, 50.0,  
+                 -97.5, 50.0,  
+                 -95.0, 50.0,  
+                 -92.5, 50.0,  
+                 -90.0, 50.0]),  
+            maximumHeights : [ //上高  
+                100000, 200000, 100000, 200000, 100000, 200000,   
+                100000, 200000, 100000, 200000, 100000],  
+            minimumHeights : [  //下高  
+                0, 100000,  0, 100000, 0, 100000, 0, 100000, 0,  
+                100000, 0],  
+            material : Cesium.Color.BLUE,  
+            outline : true,  
+            outlineColor : Cesium.Color.BLACK  
+        }  
+    }); 
+    //东西方向的横墙  
+    var redWall = viewer.entities.add({  
+        name : 'Red wall at height',  
+        wall : {  
+            positions : Cesium.Cartesian3.fromDegreesArrayHeights(  
+                 [-115.0, 44.0, 200000.0,//坐标点  
+                  -90.0, 44.0, 200000.0]  
+            ),  
+            minimumHeights : [100000.0, 100000.0], //按坐标点的最小高度数组  
+            material : Cesium.Color.RED  
+        }  
+    });  
+    /** 
+     * 根据偏移量计算目标点经纬度 
+     * @param {} start  起始点经纬度数组，单位度 
+     * @param {} offset 东北方向的偏移量，单位米 
+     * @param {} 目标点经纬度数组，单位度 
+     */  
+    function offsetToLongLat( start, offset )  
+    {  
+        var er = 6378137;  
+        var lat = parseFloat( start[1] );  
+        var lon = parseFloat( start[0] );  
+        var dn = parseFloat( offset[1] );  
+        var de = parseFloat( offset[0] );  
+       
+        dLat = dn / er;  
+        var pi = Math.PI;  
+        var dLon = de / ( er * Math.cos( pi * lat / 180 ) )  
+        return [  
+            lon + dLon * 180 / pi, lat + dLat * 180 / pi  
+        ];  
+    }
+
+    /** 
+     * 通过绘制三角形模拟卫星光束效果 
+     * @param {} entities 实体集 
+     * @param {} stltPos 卫星三维坐标数组 
+     * @param {} points 地面点 
+     * @param {} color CSS颜色代码，例如#FF0000 
+     */  
+    function lightShinePolygon( entities, stltPos, points, color )  
+    {  
+        for ( var i = 0; i < points.length; i += 2 )  
+        {  
+            var array = [  
+                stltPos[0], stltPos[1], stltPos[2], points[i], points[i + 1], 0  
+            ];  
+            if ( i + 2 == points.length )  
+            {  
+                array.push( points[0] );  
+                array.push( points[1] );  
+            }  
+            else  
+            {  
+                array.push( points[i + 2] );  
+                array.push( points[i + 3] );  
+            }  
+            array.push( 0 );  
+            entities.add( {  
+                polygon : {  
+                    hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights( array ),  
+                    perPositionHeight : true,  
+                    outline : false,  
+                    material : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .1 )  
+                }  
+            } );  
+        }  
+    }    
+
+
+    //一个多边形覆盖范围
+    function addCoverPolygon()    
+    {  
+        var color = '#FF0000';  
+        //模拟光照效果的若干多边形  
+        var points = [  
+            100, 48, 110, 40, 115, 40, 120, 43, 120, 55  
+        ];  
+        lightShinePolygon( entities, stltPos, points, color );  
+        //地面多边形  
+        entities.add( {  
+            polygon : {  
+                hierarchy : Cesium.Cartesian3.fromDegreesArray( points ),  
+                outline : true,  
+                outlineColor : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .4 ),  
+                material : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .3 )  
+            }  
+        } );  
+    } 
+
+    //一个圆形覆盖范围
+    function addCoverCircle()  
+    {  
+        var r = 600000;//半径  
+        var color = '#0000FF';  
+        //圆心  
+        var ecLong = 110.0;  
+        var ecLat = 30.0;  
+        var ec = Cesium.Cartesian3.fromDegrees( ecLong, ecLat, 0 );  
+        //模拟光照效果的若干多边形  
+        var points = [];  
+        for ( var i = 0; i < 360; i += 30 )  
+        {  
+            var coord = offsetToLongLat( [  
+                ecLong, ecLat  
+            ], [  
+                Math.cos( Math.PI * i / 180 ) * r, Math.sin( Math.PI * i / 180 ) * r  
+            ] );  
+            points.push( coord[0] );  
+            points.push( coord[1] );  
+        }  
+        lightShinePolygon( entities, stltPos, points, color );  
+        //圆  
+        position : ec,  
+        viewer.entities.add( {  
+            ellipse : {  
+                semiMinorAxis : r,  
+                semiMajorAxis : r,  
+                height : 0.0,  
+                outline : true,  
+                outlineColor : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .4 ),  
+                material : Cesium.Color.fromAlpha( Cesium.Color.fromCssColorString( color ), .3 )  
+            }  
+        } );  
+    }
+    var entities = viewer.entities;
+    var stltPos = [  
+            110.0, 40.0, 2500000  
+        ]; 
+    addCoverCircle();
+    addCoverPolygon();
   </script>
 </body>
 </html>

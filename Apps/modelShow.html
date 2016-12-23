@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Use correct character set. -->
+  <meta charset="utf-8">
+  <!-- Tell IE to use the latest, best version. -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <title>Hello World!</title>
+  <script src="../Build/Cesium/Cesium.js"></script>
+  <script src="../Apps/js/jquery-1.9.1.min.js"></script>
+  <style>
+      @import url(../Build/Cesium/Widgets/widgets.css);
+      html, body, #cesiumContainer {
+          width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="infoArea"></div>
+  <script>
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+      animation:false, //是否创建动画小器件，左下角仪表
+      baseLayerPicker:false, //是否显示图层选择器
+      fullscreenButton:false, //是否显示全屏按钮
+      geocoder:false, //是否显示geocoder小器件，右上角查询按钮
+      homeButton:false, //是否显示Home按钮
+      infoBox : false, //是否显示信息框
+      sceneModePicker:false, //是否显示3D/2D选择器
+      selectionIndicator : false , //是否显示选取指示器组件
+      timeline:false, //是否显示时间轴
+      navigationHelpButton:false, //是否显示右上角的帮助按钮
+      scene3DOnly : true, //如果设置为true，则所有几何图形以3D模式绘制以节约GPU资源
+      navigationInstructionsInitiallyVisible:false,
+      showRenderLoopErrors:false,
+      CreditDisplay:false,
+      baseLayerPicker : false,
+      geocoder : false
+    });
+    viewer._cesiumWidget._creditContainer.style.display="none";//隐藏版权文本
+    viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
+
+    var czml = [
+      {
+        "id" : "document",
+        "name" : "CZML Model",
+        "version" : "1.0",
+        "clock": {
+            "interval": "2015-01-01T00:00:00Z/2015-01-01T00:04:00Z",
+            "currentTime": "2015-01-01T00:00:00Z",
+            "multiplier": 20
+        }
+      }, 
+      {
+        "id" : "satelite",
+        "position" : {
+            "cartographicDegrees" : [-80.9389490000,-8.8974520000, 500000]
+        },
+        "model": {
+            "gltf" : "SampleData/models/weixing-Mars Global Surveyor(color).gltf",
+             "scale":5000
+        }
+      },
+      {
+        "id" : "junjian1",
+        "position" : {
+            "cartographicDegrees" : [-80.9389490000,-7.8974520000, 10]
+        },
+        "model": {
+            "gltf" : "SampleData/models/junjian1.gltf",
+             "scale":10
+        }
+      },
+      {
+        "id" : "junjian3",
+        "position" : {
+            "cartographicDegrees" : [-80.9389490000,-6.4974520000, 10]
+        },
+        "model": {
+            "gltf" : "SampleData/models/junjian3.gltf",
+             "scale":0.1
+        }
+      },
+      {
+        "id" : "junjian4",
+        "position" : {
+            "cartographicDegrees" : [-80.9389490000,-9.4974520000, 10]
+        },
+        "model": {
+            "gltf" : "SampleData/models/junjian4.gltf",
+             "scale":1
+        }
+      },
+      {
+        "id" : "zhandouji1",
+        "position" : {
+            "cartographicDegrees" : [-80.9389490000,-9.4974520000, 300000]
+        },
+        "model": {
+            "gltf" : "SampleData/models/zhandouji1.gltf",
+             "scale":0.05
+        }
+      },
+      {
+        "id" : "zhishengji1",
+        "position" : {
+            "cartographicDegrees" : [-80.9389490000,-9.4974520000, 100000]
+        },
+        "model": {
+            "gltf" : "SampleData/models/zhishengji1.gltf",
+             "scale":0.05
+        }
+      },
+      {
+        "id" : "Cesium_Air.gltf",
+        "position" : {
+            "cartographicDegrees" : [-82.9389490000,-9.4974520000, 100000]
+        },
+        "model": {
+            "gltf" : "SampleData/models/CesiumAir/Cesium_Air.gltf",
+             "scale":10000
+        }
+      }
+    ]
+
+    var promise = viewer.dataSources.add(Cesium.CzmlDataSource.load(czml));
+    
+    promise.then(function(dataSource){
+        // viewer.zoomTo (dataSource.entities.getById('junjian5'));
+    }).otherwise(function(error){
+        window.alert(error);
+    });
+
+    function flyTo(lon,lat,height=100000.0){
+        viewer.camera.flyTo({  
+            destination : Cesium.Cartesian3.fromDegrees(lon, lat, height)
+        });
+    }
+
+    flyTo(-80.0,-10.0,1000000.0);
+  </script>
+</body>
+</html>
